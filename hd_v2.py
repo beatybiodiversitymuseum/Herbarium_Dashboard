@@ -54,7 +54,7 @@ st.markdown("""
 
 @st.cache_data(show_spinner="Loading collection data...")
 def load_from_csv():
-    return _clean_df(pd.read_csv("algae.csv"))
+    return _clean_df(pd.read_csv("herbarium_algae_test.csv"))
 
 
 SPECIFY_BASE_URL = "https://database.beatymuseum.ubc.ca/specify/view/collectionobject/"
@@ -730,19 +730,33 @@ else:
             "region of interest, then use these sliders to match the bounds."
         )
         rcol1, rcol2 = st.columns(2)
+
+        # Add a buffer when min == max (e.g. single point filtered) to prevent slider crash
+        lat_min = float(round(all_lats.min(), 2))
+        lat_max = float(round(all_lats.max(), 2))
+        if lat_min == lat_max:
+            lat_min -= 0.5
+            lat_max += 0.5
+
+        lon_min = float(round(all_lons.min(), 2))
+        lon_max = float(round(all_lons.max(), 2))
+        if lon_min == lon_max:
+            lon_min -= 0.5
+            lon_max += 0.5
+
         lat_range = rcol1.slider(
             "Latitude range",
-            min_value=float(round(all_lats.min(), 2)),
-            max_value=float(round(all_lats.max(), 2)),
-            value=(float(round(all_lats.min(), 2)), float(round(all_lats.max(), 2))),
+            min_value=lat_min,
+            max_value=lat_max,
+            value=(lat_min, lat_max),
             step=0.5,
             key="map_lat_range"
         )
         lon_range = rcol2.slider(
             "Longitude range",
-            min_value=float(round(all_lons.min(), 2)),
-            max_value=float(round(all_lons.max(), 2)),
-            value=(float(round(all_lons.min(), 2)), float(round(all_lons.max(), 2))),
+            min_value=lon_min,
+            max_value=lon_max,
+            value=(lon_min, lon_max),
             step=0.5,
             key="map_lon_range"
         )
