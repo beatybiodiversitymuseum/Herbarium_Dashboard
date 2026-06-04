@@ -78,7 +78,7 @@ st.markdown("""
 
 @st.cache_data(show_spinner="Loading collection data...")
 def load_from_csv():
-    return _clean_df(pd.read_csv("herbarium_algae_test.csv"))
+    return _clean_df(pd.read_csv("algae.csv"))
 
 
 SPECIFY_BASE_URL = "https://database.beatymuseum.ubc.ca/specify/view/collectionobject/"
